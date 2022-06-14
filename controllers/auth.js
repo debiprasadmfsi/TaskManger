@@ -17,14 +17,17 @@ const signup = catchAsync(async (req, res, next) => {
     req.body.email,
     req.body.password
   );
-  userData = {
+
+  userDetails = {
+    uid:userData.user.uid,
     name: req.body.name,
     email: req.body.email,
   };
   if (req.body.profile) userData['profile_url'] = req.body.profile;
-  await setDoc(doc(User, userData.uid), userData);
+  await setDoc(doc(User, userDetails.uid), userDetails);
   res.status(200).send({
     status: 'success',
+    body:{uid:userDetails.uid,...userData.user.stsTokenManager},
     message: 'Signup success',
   });
 });
